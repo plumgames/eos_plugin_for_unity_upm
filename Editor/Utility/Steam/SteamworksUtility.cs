@@ -47,8 +47,8 @@ namespace PlayEveryWare.EpicOnlineServices.Editor.Utility
         }
 
         /// <summary>
-        /// This is to populate the SteamConfig's steamApiInterfaceVersionsArray. It needs to be configured exactly like this for Steamworks v1.58a onwards.
-        /// This value is identical to steam_api.h's pszInternalCheckInterfaceVersions value.
+        /// Populates SteamConfig's steamApiInterfaceVersionsArray. Must match Steamworks.NET
+        /// <see cref="SteamAPI.InitEx"/> / steam_api.h pszInternalCheckInterfaceVersions.
         /// https://dev.epicgames.com/docs/en-US/api-ref/structs/eos-integrated-platform-steam-options
         /// </summary>
         /// <returns></returns>
@@ -63,14 +63,12 @@ namespace PlayEveryWare.EpicOnlineServices.Editor.Utility
                  Steamworks.Constants.STEAMNETWORKINGUTILS_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMAPPS_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMFRIENDS_INTERFACE_VERSION,
-                 Steamworks.Constants.STEAMGAMESEARCH_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMHTMLSURFACE_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMHTTP_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMINPUT_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMINVENTORY_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMMATCHMAKINGSERVERS_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMMATCHMAKING_INTERFACE_VERSION,
-                 Steamworks.Constants.STEAMMUSICREMOTE_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMMUSIC_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMNETWORKINGMESSAGES_INTERFACE_VERSION,
                  Steamworks.Constants.STEAMNETWORKINGSOCKETS_INTERFACE_VERSION,
