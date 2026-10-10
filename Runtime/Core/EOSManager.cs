@@ -745,6 +745,7 @@ namespace PlayEveryWare.EpicOnlineServices
                 var dateTime = DateTime.Now;
                 var messageCategory = message.Category.Length == 0 ? new Utf8String() : message.Category;
 
+                var reportedLevel = message.Level;
                 LogType type;
                 if (message.Level < LogLevel.Warning)
                 {
@@ -759,14 +760,27 @@ namespace PlayEveryWare.EpicOnlineServices
                     type = LogType.Warning;
                 }
 
+                if (type == LogType.Error && ShouldDemoteConnectDeviceIdDuplicateLog(message.Message))
+                {
+                    type = LogType.Warning;
+                    reportedLevel = LogLevel.Warning;
+                }
+
                 Debug.LogFormat(
                     type,
                     LogOption.NoStacktrace,
                     null, "{0:O} {1}({2}): {3}",
                     dateTime.ToString(DateTimeFormatInfo.InvariantInfo),
                     messageCategory,
-                    message.Level,
+                    reportedLevel,
                     message.Message);
+            }
+
+            private static bool ShouldDemoteConnectDeviceIdDuplicateLog(Utf8String message)
+            {
+                var text = message?.ToString();
+                return text != null
+                       && text.IndexOf("DeviceId access credentials already exist", StringComparison.Ordinal) >= 0;
             }
 
             //-------------------------------------------------------------------------
@@ -1202,11 +1216,7 @@ namespace PlayEveryWare.EpicOnlineServices
                     {
                         if (connectLoginData.ResultCode != Result.Success)
                         {
-                            // InvalidUser is normal on first device / Connect login before CreateUser.
-                            var logType = connectLoginData.ResultCode == Result.InvalidUser
-                                ? LogType.Warning
-                                : LogType.Error;
-                            Log($"Connect login was not successful. ResultCode: {connectLoginData.ResultCode}", logType);
+                            Log($"Connect login was not successful. ResultCode: {connectLoginData.ResultCode}", LogType.Error);
                         }
 
                         if (connectLoginData.LocalUserId != null)
