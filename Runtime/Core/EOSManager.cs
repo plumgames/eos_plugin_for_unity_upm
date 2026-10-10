@@ -1202,7 +1202,11 @@ namespace PlayEveryWare.EpicOnlineServices
                     {
                         if (connectLoginData.ResultCode != Result.Success)
                         {
-                            Log($"Connect login was not successful. ResultCode: {connectLoginData.ResultCode}", LogType.Error);
+                            // InvalidUser is normal on first device / Connect login before CreateUser.
+                            var logType = connectLoginData.ResultCode == Result.InvalidUser
+                                ? LogType.Warning
+                                : LogType.Error;
+                            Log($"Connect login was not successful. ResultCode: {connectLoginData.ResultCode}", logType);
                         }
 
                         if (connectLoginData.LocalUserId != null)
