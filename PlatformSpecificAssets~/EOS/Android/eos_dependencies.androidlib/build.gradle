@@ -1,18 +1,22 @@
-buildscript {
-    repositories {
-        google()
-        jcenter()
-        flatDir(dirs: 'libs')
-    }
-    
-    dependencies {
-        classpath "com.android.tools.build:gradle:3.6.0"
-    }
-}
-
 apply plugin: 'com.android.library'
 
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.security:security-crypto:1.0.0'
+    implementation 'androidx.browser:browser:1.4.0'
+}
+
 android {
+    namespace "com.pew.eos_dependencies"
+    compileSdk getProperty("unity.compileSdkVersion") as int
+    buildToolsVersion getProperty("unity.buildToolsVersion")
+
+    compileOptions {
+        sourceCompatibility JavaVersion.valueOf(getProperty("unity.javaCompatibilityVersion"))
+        targetCompatibility JavaVersion.valueOf(getProperty("unity.javaCompatibilityVersion"))
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -23,16 +27,12 @@ android {
         }
     }
 
-    compileSdkVersion **APIVERSION**
-    buildToolsVersion '**BUILDTOOLS**'
     defaultConfig {
-        targetSdkVersion **TARGETSDKVERSION**
+        minSdk getProperty("unity.minSdkVersion") as int
+        targetSdk getProperty("unity.targetSdkVersion") as int
+        ndk {
+            abiFilters.addAll(getProperty("unity.abiFilters").tokenize(','))
+            debugSymbolLevel getProperty("unity.debugSymbolLevel")
+        }
     }
-}
-dependencies {
-        implementation 'androidx.appcompat:appcompat:1.5.1'
-        implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-        implementation 'androidx.security:security-crypto:1.0.0'
-        implementation 'androidx.browser:browser:1.4.0'
-    //api fileTree(dir: 'libs', include: ['*.aar'])
 }
